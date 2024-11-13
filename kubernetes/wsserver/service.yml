@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: wsserver-svc
+spec:
+  selector:
+    app: wsserver
+  ports:
+    - port: 80
+      targetPort: 3000

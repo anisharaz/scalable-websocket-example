@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wsclient-depl
+  labels:
+    app: wsclient-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wsclient
+  template:
+    metadata:
+      labels:
+        app: wsclient
+    spec:
+      containers:
+        - name: wsclient
+          image: aaraz/wsclient:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: BASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: wsclient-config
+                  key: BASE_URL

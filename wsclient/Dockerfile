@@ -1,14 +1,30 @@
-FROM node:22.11.0-alpine3.19 as base
+FROM node:20.11.1-alpine3.19 AS base
 
-FROM base as builder
+FROM base AS deps
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
-COPY package.json ./
-RUN npm install
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+RUN npm ci
+
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+ENV NEXT_TELEMETRY_DISABLED 1
 RUN npm run build
 
-
-FROM base as production
+FROM base AS runner
 WORKDIR /app
-COPY --from=builder /app/builder ./build
-CMD ["npm", "start"]
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
+RUN addgroup --system --gid 1001 app
+RUN adduser --system --uid 1001 app
+RUN mkdir .next
+RUN chown app:app .next
+COPY --from=builder --chown=app:app /app/.next/standalone ./
+COPY --from=builder --chown=app:app /app/.next/static ./.next/static
+
+USER app
+EXPOSE 3000
+ENV PORT 3000
+ENTRYPOINT HOSTNAME="0.0.0.0" node server.js

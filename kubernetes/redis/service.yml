@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-stack-svc
+spec:
+  selector:
+    app: redis-stack
+  ports:
+    - name: redis_server
+      protocol: TCP
+      port: 8001
+      targetPort: 8001
+    - name: redis_gui
+      protocol: TCP
+      port: 6379
+      targetPort: 6379

@@ -19,11 +19,11 @@ const sio = new Server(server, {
 });
 
 const Pub = Redis.createClient({
-  url: "redis://localhost:6379",
+  url: process.env.REDIS_URL,
 });
 
 const sub = Redis.createClient({
-  url: "redis://localhost:6379",
+  url: process.env.REDIS_URL,
 });
 
 Pub.connect();
@@ -35,6 +35,7 @@ app.get("/", (req, res) => {
 
 sio.on("connection", (socket) => {
   console.log("Client connected " + socket.id);
+  sio.emit("message", "Welcome to container -> " + process.env.ID);
   socket.on("message", (data) => {
     Pub.publish("MESSAGE", data);
   });

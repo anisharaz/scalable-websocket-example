@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wsserver-depl
+  labels:
+    app: wsserver-depl
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: wsserver
+  template:
+    metadata:
+      labels:
+        app: wsserver
+    spec:
+      containers:
+        - name: wsserver
+          image: aaraz/wsserver:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: REDIS_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: wsserver-config
+                  key: REDIS_URL
