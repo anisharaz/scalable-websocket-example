@@ -16,6 +16,7 @@ const sio = new Server(server, {
     origin: "*",
   },
   path: "/ws",
+  transports: ["websocket"],
 });
 
 const Pub = Redis.createClient({
@@ -35,7 +36,7 @@ app.get("/", (req, res) => {
 
 sio.on("connection", (socket) => {
   console.log("Client connected " + socket.id);
-  sio.emit("message", "Welcome to container -> " + process.env.ID);
+  socket.emit("message", "Welcome to container -> " + process.env.ID);
   socket.on("message", (data) => {
     Pub.publish("MESSAGE", data);
   });
