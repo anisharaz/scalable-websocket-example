@@ -1,0 +1,2 @@
+ingressDomain: app.local
+webSocketServerReplicas: 1

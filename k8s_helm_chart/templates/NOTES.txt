@@ -1,0 +1,1 @@
+You can now access the applicatin by setting the ingress ip address to the domain {{ .Values.ingressDomain }}

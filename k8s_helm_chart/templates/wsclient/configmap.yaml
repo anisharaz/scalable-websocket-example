@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wsclient-config
+  namespace: default
+data:
+  BASE_URL: {{printf "http://%s" .Values.ingressDomain | quote}}

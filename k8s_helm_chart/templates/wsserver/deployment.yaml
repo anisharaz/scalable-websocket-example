@@ -4,8 +4,9 @@ metadata:
   name: wsserver-depl
   labels:
     app: wsserver-depl
+  namespace: default
 spec:
-  replicas: 3
+  replicas: {{.Values.webSocketServerReplicas}}
   selector:
     matchLabels:
       app: wsserver
@@ -16,7 +17,7 @@ spec:
     spec:
       containers:
         - name: wsserver
-          image: aaraz/wsserver:latest
+          image: aaraz/wsserver:1.1
           ports:
             - containerPort: 3000
           env:

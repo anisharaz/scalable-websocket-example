@@ -4,6 +4,7 @@ metadata:
   name: redis-stack-depl
   labels:
     app: redis-stack-depl
+  namespace: default
 spec:
   replicas: 1
   selector:

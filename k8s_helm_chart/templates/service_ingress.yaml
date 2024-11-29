@@ -3,13 +3,14 @@ kind: Ingress
 
 metadata:
   name: wsapp-ingress
+  namespace: default
   annotations:
     nginx.org/websocket-services: "wsserver-svc"
 
 spec:
   ingressClassName: nginx
   rules:
-    - host: app.local
+    - host: {{.Values.ingressDomain}}
       http:
         paths:
           - path: /
